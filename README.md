@@ -1,7 +1,9 @@
 # Balatro-Beignet-Mod
 A balatro mod that adds shit jokers.
+Solarized dark             |  Solarized Ocean
+:-------------------------:|:-------------------------:
+![Updated Autopsy Report](https://preview.redd.it/a-couple-of-custom-modded-jokers-ive-made-ordered-from-v0-1sebv3unerve1.png?width=320&crop=smart&auto=webp&s=803a6b7437f6ae31ae058ada169ebccb80161a09) |  ![Updated Autopsy Report Gif](https://i.redd.it/7uiuwhtnerve1.gif)
 
-![Updated Autopsy Report](https://preview.redd.it/a-couple-of-custom-modded-jokers-ive-made-ordered-from-v0-1sebv3unerve1.png?width=320&crop=smart&auto=webp&s=803a6b7437f6ae31ae058ada169ebccb80161a09)
   
 ![Monkey](https://preview.redd.it/a-couple-of-custom-modded-jokers-ive-made-ordered-from-v0-5ospbv0perve1.png?width=320&crop=smart&auto=webp&s=16c66e9915f6102dc728b465fac7ebdad17659f0)
 
