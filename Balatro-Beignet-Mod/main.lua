@@ -82,7 +82,7 @@ SMODS.Joker{
 -------------------- JOKER DAVID --------------------------
 
 SMODS.Atlas{
-    key = 'Update Autopsy Report', --atlas key
+    key = 'Updated Autopsy Report', --atlas key
     path = 'david.png', --atlas' path in (yourMod)/assets/1x or (yourMod)/assets/2x
     px = 71, --width of one card
     py = 95 -- height of one card
@@ -90,7 +90,7 @@ SMODS.Atlas{
 SMODS.Joker{
     key = 'david', --joker key
     loc_txt = { -- local text
-        name = 'Update Autopsy Report',
+        name = 'Updated Autopsy Report',
         text = {
           'If played hand is different',
           'from the previous one',
@@ -99,7 +99,7 @@ SMODS.Joker{
           '{C:inactive}Last played hand :{} #2#'
         },
     },
-    atlas = 'Update Autopsy Report', --atlas' key
+    atlas = 'Updated Autopsy Report', --atlas' key
     rarity = 1, --rarity: 1 = Common, 2 = Uncommon, 3 = Rare, 4 = Legendary
     --soul_pos = { x = 0, y = 0 },
     cost = 1, --cost
@@ -135,7 +135,7 @@ SMODS.Joker{
 
                 return {
                     card = card,
-                    message = 'Upgrade',
+                    message = 'Objection',
                     colour = G.C.MULT
                 }
 
