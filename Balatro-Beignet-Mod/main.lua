@@ -298,7 +298,7 @@ SMODS.Joker{
         text = {
           'When Blind is selected,',
           'if one of your jokers is a {C:attention}banana{},',
-          'destroy it and gains {X:mult,C:white}X1{} Mult.',
+          'destroy it and gain {X:mult,C:white}X1{} Mult.',
           '{C:inactive}(Currently {X:mult,C:white}X#1#{C:inactive} Mult)'
         },
     },
