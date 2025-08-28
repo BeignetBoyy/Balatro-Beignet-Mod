@@ -363,6 +363,69 @@ SMODS.Joker{
 
     end
 }
+
+-------------------- NONARY --------------------------
+
+SMODS.Atlas{
+    key = 'Nonary', --atlas key
+    path = 'nonary.png', --atlas' path in (yourMod)/assets/1x or (yourMod)/assets/2x
+    px = 71, --width of one card
+    py = 95 -- height of one card
+}
+SMODS.Joker{
+    key = 'nonary', --joker key
+    loc_txt = { -- local text
+        name = 'Nonary',
+        text = {
+          'If the sum of the base {C:chips}chips{}', 
+          'of scored cards is equal',
+          'to {C:attention}9{}, destroy them',
+          'and create an {C:attention}enhanced 9{}'
+        },
+    },
+    atlas = 'Nonary', --atlas' key
+    rarity = 2, --rarity: 1 = Common, 2 = Uncommon, 3 = Rare, 4 = Legendary
+    --soul_pos = { x = 0, y = 0 },
+    cost = 5, --cost
+    unlocked = true, --where it is unlocked or not: if true, 
+    discovered = true, --whether or not it starts discovered
+    blueprint_compat = true, --can it be blueprinted/brainstormed/other
+    eternal_compat = true, --can it be eternal
+    perishable_compat = true, --can it be perishable
+    pos = {x = 0, y = 0}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
+    --[[config = { 
+      extra = {
+        Xmult = 1 --configurable value
+      }
+    },
+    loc_vars = function(self,info_queue,center)
+        return {vars = {center.ability.extra.Xmult}} --#1# is replaced with card.ability.extra.Xmult
+    end,]]--
+    calculate = function(self,card,context)
+
+        if context.joker_main then
+
+            local scored_cards = G.play.cards
+            local chips_sum = 0
+            for card in scored_cards do
+                chips_sum = chips_sum + card.ability.chips
+            end
+
+            if chips_sum == 9 then
+                print("SUM")
+            end
+
+            return {
+                card = card,
+                Xmult_mod = card.ability.extra.Xmult,
+                message = 'X' .. card.ability.extra.Xmult,
+                colour = G.C.MULT
+            }
+        end
+
+    end
+}
+
 ----------------------------------------------
 ------------MOD CODE END----------------------
     
