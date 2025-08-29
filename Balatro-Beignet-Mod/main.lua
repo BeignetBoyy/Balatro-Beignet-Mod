@@ -393,36 +393,55 @@ SMODS.Joker{
     eternal_compat = true, --can it be eternal
     perishable_compat = true, --can it be perishable
     pos = {x = 0, y = 0}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
-    --[[config = { 
+    config = { 
       extra = {
-        Xmult = 1 --configurable value
+        cards_to_destroy = {} --configurable value
       }
     },
     loc_vars = function(self,info_queue,center)
-        return {vars = {center.ability.extra.Xmult}} --#1# is replaced with card.ability.extra.Xmult
-    end,]]--
+        return {vars = {center.ability.extra.cards_to_destroy}} --#1# is replaced with card.ability.extra.Xmult
+    end,
     calculate = function(self,card,context)
 
-        if context.joker_main then
-
-            local scored_cards = G.play.cards
+        if context.cardarea == G.jokers and context.before and context.full_hand then
             local chips_sum = 0
-            for card in scored_cards do
-                chips_sum = chips_sum + card.ability.chips
-            end
-
+			for i = 1, #context.full_hand do
+				chips_sum = chips_sum + context.full_hand[i]:get_id()
+			end
             if chips_sum == 9 then
+                card.ability.extra.cards_to_destroy = context.full_hand
                 print("SUM")
-            end
 
-            return {
-                card = card,
-                Xmult_mod = card.ability.extra.Xmult,
-                message = 'X' .. card.ability.extra.Xmult,
-                colour = G.C.MULT
-            }
+            end
         end
 
+        if context.destroying_card and not context.blueprint then
+            local destroy = card.ability.extra.cards_to_destroy
+            for i = #destroy, 1, -1 do
+                local card = destroy[i]
+                if SMODS.shatters(card) then
+                    card:shatter()
+                else
+                    card:start_dissolve(nil, i == #destroy)
+                end
+            end
+        end
+
+--[[
+        if context.destroying_card and not context.blueprint and context.destroying_card.ID == card.ability.extra.id_to_destroy then
+
+            --print(context.destroying_card.ID)
+            card_eval_status_text(
+                card,
+                "extra",
+                nil,
+                nil,
+                nil,
+                { message = '', colour = G.C.FILTER }
+            )
+
+            return { remove = not context.destroying_card.ability.eternal }
+		end]]
     end
 }
 
