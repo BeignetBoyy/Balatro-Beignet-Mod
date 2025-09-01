@@ -431,12 +431,6 @@ SMODS.Joker{
                     end
                 return true 
             end }))
-
-            return {
-                card = card,
-                message = 'Funyarinpa',
-                colour = G.C.MULT
-            }
         end  
 
         if context.final_scoring_step then
@@ -459,6 +453,12 @@ SMODS.Joker{
                     create_playing_card({front = G.P_CARDS[_suit..'_'.._rank], center = pseudorandom_element(cen_pool, pseudoseed('spe_card'))}, G.hand, nil, false, {G.C.SECONDARY_SET.Spectral})
                 return true 
             end }))
+
+            return {
+                card = card,
+                message = 'Funyarinpa',
+                colour = G.C.MULT
+            }
         end
     end
 }
