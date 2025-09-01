@@ -395,53 +395,71 @@ SMODS.Joker{
     pos = {x = 0, y = 0}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
     config = { 
       extra = {
-        cards_to_destroy = {} --configurable value
+        destroy_cards = false --configurable value
       }
     },
     loc_vars = function(self,info_queue,center)
-        return {vars = {center.ability.extra.cards_to_destroy}} --#1# is replaced with card.ability.extra.Xmult
+        return {vars = {center.ability.extra.destroy_cards}} --#1# is replaced with card.ability.extra.Xmult
     end,
     calculate = function(self,card,context)
 
-        if context.cardarea == G.jokers and context.before and context.full_hand then
+        -- Digital root logic, we check each card from the full hand and sum the chips together
+        if context.before and context.full_hand then
             local chips_sum = 0
 			for i = 1, #context.full_hand do
 				chips_sum = chips_sum + context.full_hand[i]:get_id()
 			end
-            if chips_sum == 9 then
-                card.ability.extra.cards_to_destroy = context.full_hand
-                print("SUM")
-
+            -- If the total chips sums up to 9 we store the full hand in the cards_to_destroy array
+            if chips_sum == 9 then 
+                card.ability.extra.destroy_cards = true
             end
         end
 
-        if context.destroying_card and not context.blueprint then
-            local destroy = card.ability.extra.cards_to_destroy
-            for i = #destroy, 1, -1 do
-                local card = destroy[i]
-                if SMODS.shatters(card) then
-                    card:shatter()
-                else
-                    card:start_dissolve(nil, i == #destroy)
-                end
-            end
+        -- Card destruction, I couldn't do it without and event because it kept triggering instantly
+        if context.destroying_card and card.ability.extra.destroy_cards and not context.blueprint then
+            G.E_MANAGER:add_event(Event({
+                trigger = 'after',
+                func = function() 
+                    local destroy = context.full_hand
+                    for i = #destroy, 1, -1 do
+                        local card = destroy[i]
+                        if SMODS.shatters(card) then
+                            card:shatter()
+                        else
+                            card:start_dissolve(nil, i == #destroy)
+                        end
+                    end
+                return true 
+            end }))
+
+            return {
+                card = card,
+                message = 'Funyarinpa',
+                colour = G.C.MULT
+            }
+        end  
+
+        if context.final_scoring_step then
+            G.E_MANAGER:add_event(Event({
+                trigger = 'after',
+                delay = 0.7,
+                func = function() 
+                    local cards = {}
+                    local _suit, _rank = nil, nil
+                    _rank = '9'
+                    _suit = pseudorandom_element({'S','H','D','C'}, pseudoseed('nonary_create'))
+                    local cen_pool = {}
+                    for k, v in pairs(G.P_CENTER_POOLS["Enhanced"]) do
+                        if v.key ~= 'm_stone' then 
+                            cen_pool[#cen_pool+1] = v
+                        end
+                    end
+
+
+                    create_playing_card({front = G.P_CARDS[_suit..'_'.._rank], center = pseudorandom_element(cen_pool, pseudoseed('spe_card'))}, G.hand, nil, false, {G.C.SECONDARY_SET.Spectral})
+                return true 
+            end }))
         end
-
---[[
-        if context.destroying_card and not context.blueprint and context.destroying_card.ID == card.ability.extra.id_to_destroy then
-
-            --print(context.destroying_card.ID)
-            card_eval_status_text(
-                card,
-                "extra",
-                nil,
-                nil,
-                nil,
-                { message = '', colour = G.C.FILTER }
-            )
-
-            return { remove = not context.destroying_card.ability.eternal }
-		end]]
     end
 }
 
