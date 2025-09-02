@@ -407,9 +407,23 @@ SMODS.Joker{
         if context.before and context.full_hand then
             local chips_sum = 0
 			for i = 1, #context.full_hand do
-				chips_sum = chips_sum + context.full_hand[i]:get_id()
+                if context.full_hand[i]:get_id() > 0 then -- Stone cards have a negative id so we don't aknowledge them
+				    chips_sum = chips_sum + context.full_hand[i]:get_id()
+                end
 			end
-            -- If the total chips sums up to 9 we store the full hand in the cards_to_destroy array
+
+            -- Digital root logic until the sum is more than 1 digit long we keep adding them together
+            local length = math.floor(math.log10(chips_sum)+1)
+            while length > 1 do
+                local new_sum = 0
+                for digit in tostring(chips_sum):gmatch("%d") do
+                    new_sum = new_sum + tonumber(digit)
+                end
+                chips_sum = new_sum
+                length = math.floor(math.log10(chips_sum) + 1)
+            end
+
+            -- If the total chips we flag the hand to be destroyed
             if chips_sum == 9 then 
                 card.ability.extra.destroy_cards = true
             end
@@ -433,6 +447,7 @@ SMODS.Joker{
             end }))
         end  
 
+        -- Card creation event the rank is always a 9, the suit is random ans we also apply a random enhancement (excluding stone cord)
         if context.final_scoring_step then
             G.E_MANAGER:add_event(Event({
                 trigger = 'after',
@@ -448,7 +463,6 @@ SMODS.Joker{
                             cen_pool[#cen_pool+1] = v
                         end
                     end
-
 
                     create_playing_card({front = G.P_CARDS[_suit..'_'.._rank], center = pseudorandom_element(cen_pool, pseudoseed('spe_card'))}, G.hand, nil, false, {G.C.SECONDARY_SET.Spectral})
                 return true 
