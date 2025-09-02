@@ -377,9 +377,9 @@ SMODS.Joker{
     loc_txt = { -- local text
         name = 'Nonary',
         text = {
-          'If the sum of the base {C:chips}chips{}', 
-          'of scored cards is equal',
-          'to {C:attention}9{}, destroy them',
+          'If the {C:attention}digital root{} of the', 
+          'base {C:chips}chips{} of full hand',
+          'is equal to {C:attention}9{}, destroy them',
           'and create an {C:attention}enhanced 9{}'
         },
     },
@@ -423,10 +423,8 @@ SMODS.Joker{
                 length = math.floor(math.log10(chips_sum) + 1)
             end
 
-            -- If the total chips we flag the hand to be destroyed
-            if chips_sum == 9 then 
-                card.ability.extra.destroy_cards = true
-            end
+            -- If the total chips is equal to 9 we flag the hand to be destroyed
+            card.ability.extra.destroy_cards = (chips_sum == 9)
         end
 
         -- Card destruction, I couldn't do it without and event because it kept triggering instantly
@@ -448,7 +446,7 @@ SMODS.Joker{
         end  
 
         -- Card creation event the rank is always a 9, the suit is random ans we also apply a random enhancement (excluding stone cord)
-        if context.final_scoring_step then
+        if context.final_scoring_step and card.ability.extra.destroy_cards then
             G.E_MANAGER:add_event(Event({
                 trigger = 'after',
                 delay = 0.7,
