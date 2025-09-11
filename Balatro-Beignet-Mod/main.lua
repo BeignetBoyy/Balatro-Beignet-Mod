@@ -407,8 +407,15 @@ SMODS.Joker{
         if context.before and context.full_hand then
             local chips_sum = 0
 			for i = 1, #context.full_hand do
-                if context.full_hand[i]:get_id() > 0 then -- Stone cards have a negative id so we don't aknowledge them
-				    chips_sum = chips_sum + context.full_hand[i]:get_id()
+                local rank = context.full_hand[i]:get_id()
+                if rank > 0 then -- Stone cards have a negative id so we don't aknowledge them
+                    if rank == 14 then 
+                        rank = 11
+                    elseif rank > 10 then 
+                        rank = 10 
+                    end
+
+				    chips_sum = chips_sum + rank
                 end
 			end
 
