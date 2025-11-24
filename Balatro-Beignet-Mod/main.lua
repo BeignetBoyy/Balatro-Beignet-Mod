@@ -496,7 +496,7 @@ SMODS.Joker{
         name = 'Rock And Stone',
         text = {
           'If played hand contains,',
-          'a {C:chips}stone card{}, {C:green}1 in 5{} chance to',
+          'a {C:chips}stone card{}, {C:green}#2# in #3#{} chance to',
           'destroy it and gain a random thing',
           '{C:inactive}(playing card, tarot card, joker,',
           '{C:inactive}money, hand, discard, tag)'
@@ -514,16 +514,38 @@ SMODS.Joker{
     pos = {x = 0, y = 0}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
     config = { 
       extra = {
-        Xmult = 1 --configurable value
+        has_stone = false,
+        odds = 2 -- Change to 1 in 5 after testing
       }
     },
-    loc_vars = function(self,info_queue,center)
-        return {vars = {center.ability.extra.Xmult}} --#1# is replaced with card.ability.extra.Xmult
+    loc_vars = function(self,info_queue,card)
+        local num, denom = SMODS.get_probability_vars(card, 1, card.ability.extra.odds, "RockAndStone")
+
+        return {
+            vars = {
+                card.ability.extra.has_stone,
+                num,
+                denom
+            }
+        }
     end,
     calculate = function(self,card,context)
 
-        -- No logic yet
+        -- Before starting we pick check the conditions
+        if context.before and context.full_hand then
+			for i = 1, #context.full_hand do
+                local rank = context.full_hand[i]:get_id()
+                if rank < 0 then -- Stone cards have a negative id so we don't aknowledge them
+                    card.ability.extra.has_stone = true
+                end
+			end
 
+            if card.ability.extra.has_stone then
+                if SMODS.pseudorandom_probability(card, "RockAndStone", 1, card.ability.extra.odds) then
+                    print("STONE")
+                end
+            end
+        end
     end
 }
 
