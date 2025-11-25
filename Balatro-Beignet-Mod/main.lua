@@ -496,7 +496,7 @@ SMODS.Joker{
         name = 'Rock And Stone',
         text = {
           'If played hand contains,',
-          'a {C:chips}stone card{}, {C:green}#2# in #3#{} chance to',
+          'only {C:chips}stone cards{}, {C:green}#3# in #4#{} chance to', -- 3 is num and 4 is denom
           'destroy it and gain a random thing',
           '{C:inactive}(playing card, tarot card, joker,',
           '{C:inactive}money, hand, discard, tag)'
@@ -515,6 +515,7 @@ SMODS.Joker{
     config = { 
       extra = {
         has_stone = false,
+        destroy_cards = false,
         odds = 2 -- Change to 1 in 5 after testing
       }
     },
@@ -524,6 +525,7 @@ SMODS.Joker{
         return {
             vars = {
                 card.ability.extra.has_stone,
+                card.ability.extra.destroy_cards,
                 num,
                 denom
             }
@@ -533,19 +535,37 @@ SMODS.Joker{
 
         -- Before starting we pick check the conditions
         if context.before and context.full_hand then
+
+            card.ability.extra.has_stone = false 
+            card.ability.extra.destroy_cards = false
+
 			for i = 1, #context.full_hand do
                 local rank = context.full_hand[i]:get_id()
-                if rank < 0 then -- Stone cards have a negative id so we don't aknowledge them
+                if rank < 0 then -- If any on the cards isn't a stone card then we set the flag to false
                     card.ability.extra.has_stone = true
+                else
+                    card.ability.extra.has_stone = false
+                    break
                 end
 			end
 
             if card.ability.extra.has_stone then
-                if SMODS.pseudorandom_probability(card, "RockAndStone", 1, card.ability.extra.odds) then
-                    print("STONE")
-                end
+                card.ability.extra.destroy_cards = SMODS.pseudorandom_probability(card, "RockAndStone", 1, card.ability.extra.odds)
             end
         end
+
+        if context.destroying_card and card.ability.extra.destroy_cards and not context.blueprint then
+            G.E_MANAGER:add_event(Event({
+                trigger = 'after',
+                func = function() 
+                    local destroy = context.full_hand
+                    for i = #destroy, 1, -1 do
+                        local card = destroy[i]
+                        card:start_dissolve(nil, i == #destroy)
+                    end
+                return true 
+            end }))
+        end  
     end
 }
 
