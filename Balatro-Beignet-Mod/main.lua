@@ -499,7 +499,7 @@ SMODS.Joker{
           'only {C:chips}stone cards{}, {C:green}#3# in #4#{} chance to', -- 3 is num and 4 is denom
           'destroy it and gain a random thing',
           '{C:inactive}(playing card, tarot card, joker,',
-          '{C:inactive}money, hand, discard, tag)'
+          '{C:inactive}money, tag)'
         },
     },
     atlas = 'RockAndStone', --atlas' key
@@ -565,6 +565,34 @@ SMODS.Joker{
                     end
                 return true 
             end }))
+
+            --Testing giving a random tag
+            -- Code shamelessly stolen from cryptid
+			local tag_key
+			repeat
+				tag_key = get_next_tag_key("rockandstone")
+			until tag_key ~= "tag_boss"
+            
+            local tag = Tag(tag_key)
+
+            if tag.name == "Orbital Tag" then
+				local _poker_hands = {}
+				for k, v in pairs(G.GAME.hands) do
+					if v.visible then
+						_poker_hands[#_poker_hands + 1] = k
+					end
+				end
+				tag.ability.orbital_hand = pseudorandom_element(_poker_hands, pseudoseed("rockandstone"))
+			end
+
+            add_tag(tag)
+
+
+            return {
+                card = card,
+                message = 'ROCK AND STONE !',
+                colour = G.C.MULT
+            }
         end  
     end
 }
