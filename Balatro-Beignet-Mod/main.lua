@@ -10,7 +10,7 @@
 
 SMODS.Atlas{
     key = 'Evil Joker', --atlas key
-    path = 'evil_joker.png', --atlas' path in (yourMod)/assets/1x or (yourMod)/assets/2x
+    path = 'atlas.png', --atlas' path in (yourMod)/assets/1x or (yourMod)/assets/2x
     px = 71, --width of one card
     py = 95 -- height of one card
 }
@@ -34,7 +34,7 @@ SMODS.Joker{
     blueprint_compat = true, --can it be blueprinted/brainstormed/other
     eternal_compat = true, --can it be eternal
     perishable_compat = false, --can it be perishable
-    pos = {x = 0, y = 0}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
+    pos = {x = 3, y = 0}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
     config = { 
       extra = {
         Xmult = 0 --configurable value
@@ -83,7 +83,7 @@ SMODS.Joker{
 
 SMODS.Atlas{
     key = 'Updated Autopsy Report', --atlas key
-    path = 'david.png', --atlas' path in (yourMod)/assets/1x or (yourMod)/assets/2x
+    path = 'atlas.png', --atlas' path in (yourMod)/assets/1x or (yourMod)/assets/2x
     px = 71, --width of one card
     py = 95 -- height of one card
 }
@@ -108,7 +108,7 @@ SMODS.Joker{
     blueprint_compat = true, --can it be blueprinted/brainstormed/other
     eternal_compat = true, --can it be eternal
     perishable_compat = true, --can it be perishable
-    pos = {x = 0, y = 0}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
+    pos = {x = 1, y = 0}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
     config = { 
       extra = {
         mult = 0, --configurable value
@@ -159,7 +159,7 @@ SMODS.Joker{
 
 SMODS.Atlas{
     key = 'jonkler', --atlas key
-    path = 'jonkler.png', --atlas' path in (yourMod)/assets/1x or (yourMod)/assets/2x
+    path = 'atlas.png', --atlas' path in (yourMod)/assets/1x or (yourMod)/assets/2x
     px = 71, --width of one card
     py = 95 -- height of one card
 }
@@ -177,14 +177,14 @@ SMODS.Joker{
     },
     atlas = 'jonkler', --atlas' key
     rarity = 4, --rarity: 1 = Common, 2 = Uncommon, 3 = Rare, 4 = Legendary
-    soul_pos = { x = 1, y = 0 },
+    soul_pos = { x = 1, y = 1 },
     cost = 20, --cost
     unlocked = true, --where it is unlocked or not: if true, 
     discovered = true, --whether or not it starts discovered
     blueprint_compat = false, --can it be blueprinted/brainstormed/other
     eternal_compat = true, --can it be eternal
     perishable_compat = true, --can it be perishable
-    pos = {x = 0, y = 0}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
+    pos = {x = 0, y = 1}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
     config = { 
         extra = {
             id_to_destroy = 0,
@@ -287,7 +287,7 @@ SMODS.Joker{
 
 SMODS.Atlas{
     key = 'Monkey', --atlas key
-    path = 'monke.png', --atlas' path in (yourMod)/assets/1x or (yourMod)/assets/2x
+    path = 'atlas.png', --atlas' path in (yourMod)/assets/1x or (yourMod)/assets/2x
     px = 71, --width of one card
     py = 95 -- height of one card
 }
@@ -311,7 +311,7 @@ SMODS.Joker{
     blueprint_compat = true, --can it be blueprinted/brainstormed/other
     eternal_compat = true, --can it be eternal
     perishable_compat = true, --can it be perishable
-    pos = {x = 0, y = 0}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
+    pos = {x = 4, y = 0}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
     config = { 
       extra = {
         Xmult = 1 --configurable value
@@ -368,7 +368,7 @@ SMODS.Joker{
 
 SMODS.Atlas{
     key = 'Nonary', --atlas key
-    path = 'nonary.png', --atlas' path in (yourMod)/assets/1x or (yourMod)/assets/2x
+    path = 'atlas.png', --atlas' path in (yourMod)/assets/1x or (yourMod)/assets/2x
     px = 71, --width of one card
     py = 95 -- height of one card
 }
@@ -486,7 +486,7 @@ SMODS.Joker{
 
 SMODS.Atlas{
     key = 'RockAndStone', --atlas key
-    path = 'drg.png', --atlas' path in (yourMod)/assets/1x or (yourMod)/assets/2x
+    path = 'atlas.png', --atlas' path in (yourMod)/assets/1x or (yourMod)/assets/2x
     px = 71, --width of one card
     py = 95 -- height of one card
 }
@@ -511,7 +511,7 @@ SMODS.Joker{
     blueprint_compat = true, --can it be blueprinted/brainstormed/other
     eternal_compat = true, --can it be eternal
     perishable_compat = true, --can it be perishable
-    pos = {x = 0, y = 0}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
+    pos = {x = 2, y = 0}, --position in atlas, starts at 0, scales by the atlas' card size (px and py): {x = 1, y = 0} would mean the sprite is 71 pixels to the right
     config = { 
       extra = {
         has_stone = false,
