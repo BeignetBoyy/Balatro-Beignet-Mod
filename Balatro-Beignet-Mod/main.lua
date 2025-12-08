@@ -587,6 +587,19 @@ SMODS.Joker{
 
             add_tag(tag)
 
+            -- Adding random card (no enhancement)
+            local cards = {}
+            local _suit, _rank = nil, nil
+            _rank = pseudorandom_element({'A', '2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K'}, pseudoseed('rockandstone'))
+            _suit = pseudorandom_element({'S','H','D','C'}, pseudoseed('rockandstone'))
+            local cen_pool = {}
+            for k, v in pairs(G.P_CENTER_POOLS["Enhanced"]) do
+                if v.key ~= 'm_stone' then 
+                    cen_pool[#cen_pool+1] = v
+                end
+            end
+
+            create_playing_card({front = G.P_CARDS[_suit..'_'.._rank], center = pseudorandom_element(cen_pool, pseudoseed('rockandstone'))}, G.hand, nil, false, {G.C.SECONDARY_SET.Spectral})
 
             return {
                 card = card,
