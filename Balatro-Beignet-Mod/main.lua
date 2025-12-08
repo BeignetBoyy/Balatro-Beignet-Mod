@@ -601,6 +601,12 @@ SMODS.Joker{
 
             create_playing_card({front = G.P_CARDS[_suit..'_'.._rank], center = pseudorandom_element(cen_pool, pseudoseed('rockandstone'))}, G.hand, nil, false, {G.C.SECONDARY_SET.Spectral})
 
+            -- Random tarot card
+            local card = create_card('Tarot',G.consumeables, nil, nil, nil, nil, nil, 'vag')
+            card:add_to_deck()
+            G.consumeables:emplace(card)
+            G.GAME.consumeable_buffer = 0
+
             return {
                 card = card,
                 message = 'ROCK AND STONE !',
