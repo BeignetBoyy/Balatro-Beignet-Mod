@@ -498,8 +498,7 @@ SMODS.Joker{
           'If played hand contains,',
           'only {C:chips}stone cards{}, {C:green}#3# in #4#{} chance to', -- 3 is num and 4 is denom
           'destroy it and gain a random thing',
-          '{C:inactive}(playing card, tarot card, joker,',
-          '{C:inactive}money, tag)'
+          '{C:inactive}(playing card, tarot card, joker, tag)'
         },
     },
     atlas = 'RockAndStone', --atlas' key
@@ -566,46 +565,67 @@ SMODS.Joker{
                 return true 
             end }))
 
-            --Testing giving a random tag
-            -- Code shamelessly stolen from cryptid
-			local tag_key
-			repeat
-				tag_key = get_next_tag_key("rockandstone")
-			until tag_key ~= "tag_boss"
-            
-            local tag = Tag(tag_key)
+            local action = pseudorandom_element({"TAG", "TAROT", "CARD", "JOKER"}, pseudoseed('rockandstone_action'))
 
-            if tag.name == "Orbital Tag" then
-				local _poker_hands = {}
-				for k, v in pairs(G.GAME.hands) do
-					if v.visible then
-						_poker_hands[#_poker_hands + 1] = k
-					end
-				end
-				tag.ability.orbital_hand = pseudorandom_element(_poker_hands, pseudoseed("rockandstone"))
-			end
+            print(action)
+            if action == "TAG" then
+                --random tag
+                -- Code shamelessly stolen from cryptid
+                local tag_key
+                repeat
+                    tag_key = get_next_tag_key("rockandstone")
+                until tag_key ~= "tag_boss"
+                
+                local tag = Tag(tag_key)
 
-            add_tag(tag)
+                if tag.name == "Orbital Tag" then
+                    local _poker_hands = {}
+                    for k, v in pairs(G.GAME.hands) do
+                        if v.visible then
+                            _poker_hands[#_poker_hands + 1] = k
+                        end
+                    end
+                    tag.ability.orbital_hand = pseudorandom_element(_poker_hands, pseudoseed("rockandstone"))
+                end
 
-            -- Adding random card (no enhancement)
-            local cards = {}
-            local _suit, _rank = nil, nil
-            _rank = pseudorandom_element({'A', '2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K'}, pseudoseed('rockandstone'))
-            _suit = pseudorandom_element({'S','H','D','C'}, pseudoseed('rockandstone'))
-            local cen_pool = {}
-            for k, v in pairs(G.P_CENTER_POOLS["Enhanced"]) do
-                if v.key ~= 'm_stone' then 
-                    cen_pool[#cen_pool+1] = v
+                add_tag(tag)
+            elseif action == "TAROT" then 
+                -- Random tarot card
+                if G.consumeables.config.card_limit > #G.consumeables.cards then -- Must have room
+                    local card = create_card('Tarot',G.consumeables, nil, nil, nil, nil, nil, 'rockandstone')
+                    card:add_to_deck()
+                    G.consumeables:emplace(card)
+                    G.GAME.consumeable_buffer = 0
+                end
+            elseif action == "CARD" then 
+                -- Adding random card
+                local cards = {}
+                local _suit, _rank = nil, nil
+                _rank = pseudorandom_element({'A', '2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K'}, pseudoseed('rockandstone'))
+                _suit = pseudorandom_element({'S','H','D','C'}, pseudoseed('rockandstone'))
+                local cen_pool = {}
+                for k, v in pairs(G.P_CENTER_POOLS["Enhanced"]) do
+                    if v.key ~= 'm_stone' then 
+                        cen_pool[#cen_pool+1] = v
+                    end
+                    cen_pool[#cen_pool+1] = nil
+                end
+
+                create_playing_card({front = G.P_CARDS[_suit..'_'.._rank], center = pseudorandom_element(cen_pool, pseudoseed('rockandstone'))}, G.hand, nil, false, {G.C.SECONDARY_SET.Spectral})
+            elseif action == "JOKER" then
+                if #G.jokers.cards + G.GAME.joker_buffer < G.jokers.config.card_limit then
+                    G.GAME.joker_buffer = G.GAME.joker_buffer + 1
+                    local card = create_card('Joker', G.jokers, nil, 0, nil, nil, nil, 'rockandstone')
+                    card:add_to_deck()
+                    G.jokers:emplace(card)
+                    card:start_materialize()
+                    G.GAME.joker_buffer = 0
                 end
             end
 
-            create_playing_card({front = G.P_CARDS[_suit..'_'.._rank], center = pseudorandom_element(cen_pool, pseudoseed('rockandstone'))}, G.hand, nil, false, {G.C.SECONDARY_SET.Spectral})
 
-            -- Random tarot card
-            local card = create_card('Tarot',G.consumeables, nil, nil, nil, nil, nil, 'vag')
-            card:add_to_deck()
-            G.consumeables:emplace(card)
-            G.GAME.consumeable_buffer = 0
+
+
 
             return {
                 card = card,
